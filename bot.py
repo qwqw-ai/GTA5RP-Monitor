@@ -392,9 +392,9 @@ f"📊 **За 5 минут:** `{total_change}`\n\n"
                 else:
                     delta = "0"
 
-           lines.append(
-               f"{status} **{name}** — `{format_number(online)}` игроков ({delta})"
-           )
+            lines.append(
+                f"{status} **{name}** — `{format_number(online)}` игроков ({delta})"
+            )
 
         embeds.append({
             "title": (
