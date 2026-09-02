@@ -366,8 +366,7 @@ def build_embeds(data):
 
         embeds.append({
             "title": f"🖥️ GTA5RP — сервера {index}/2",
-            "description": "
-".join(lines),
+            "description": "\n".join(lines),
             "color": 0x2ECC71,
             "footer": {"text": f"Серверов: {data['servers_count']}"}
         })
