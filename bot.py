@@ -317,20 +317,11 @@ def build_embeds(data):
 
     # EMBED №1 — СТАТИСТИКА
     description = (
-        f"👥 **Онлайн сейчас:** `{format_number(data['total_online'])}`
-"
-        f"📊 **За 5 минут:** `{total_change}`
-
-"
-        f"🖥️ **Серверов:** `{data['servers_count']}`
-
-"
-        f"📈 **Пик сегодня:** `{format_number(data['today_peak'])}`
-
-"
-        f"🏆 **Рекорд:** `{format_number(data['record'])}`
-
-"
+        f"👥 **Онлайн сейчас:** `{format_number(data['total_online'])}`\n"
+        f"📊 **За 5 минут:** `{total_change}`\n\n"
+        f"🖥️ **Серверов:** `{data['servers_count']}`\n\n"
+        f"📈 **Пик сегодня:** `{format_number(data['today_peak'])}`\n\n"
+        f"🏆 **Рекорд:** `{format_number(data['record'])}`\n\n"
         f"🌐 [Открыть GTA5MasterList]({SITE_URL})"
     )
 
