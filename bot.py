@@ -350,15 +350,15 @@ def build_embeds(data):
 
             previous_online = previous["servers"].get(name)
             if previous_online is None:
-                delta = "новый"
+                delta = "🆕 новый"
             else:
                 diff = online - previous_online
                 if diff > 0:
-                    delta = f"+{format_number(diff)}"
+                    delta = f"🟢+{format_number(diff)}"
                 elif diff < 0:
-                    delta = format_number(diff)
+                    delta = f"🔴 {format_number(diff)}"
                 else:
-                    delta = "0"
+                    delta = "⚪0"
 
             lines.append(
                 f"{status} **{name}** — `{format_number(online)}` игроков ({delta})"
