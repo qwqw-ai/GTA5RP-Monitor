@@ -1,4 +1,5 @@
 import os
+import json
 import re
 import time
 import requests
@@ -16,6 +17,7 @@ SITE_URL = "https://gta5masterlist.ru/projects/gta5rp"
 
 UPDATE_INTERVAL = 60
 MESSAGE_ID_FILE = "message_id.txt"
+STATE_FILE = "previous_stats.json"
 
 HEADERS = {
     "User-Agent": (
@@ -62,8 +64,6 @@ def load_message_id():
 
     except FileNotFoundError:
         return None
-
-
 def save_message_id(message_id):
     with open(
         MESSAGE_ID_FILE,
@@ -71,7 +71,28 @@ def save_message_id(message_id):
         encoding="utf-8"
     ) as file:
         file.write(str(message_id))
+def load_previous_stats():
+    try:
+        with open(STATE_FILE, "r", encoding="utf-8") as file:
+            return json.load(file)
+    except:
+        return {
+            "total_online": None,
+            "servers": {}
+        }
 
+
+def save_previous_stats(data):
+    state = {
+        "total_online": data["total_online"],
+        "servers": {
+            server["name"]: server["online"]
+            for server in data["servers"]
+        }
+    }
+
+    with open(STATE_FILE, "w", encoding="utf-8") as file:
+        json.dump(state, file, ensure_ascii=False, indent=2)
 
 # ==========================================
 # ПОЛУЧЕНИЕ ДАННЫХ С САЙТА
@@ -279,14 +300,28 @@ def get_data():
 def build_embeds(data):
 
     embeds = []
+previous = load_previous_stats()
 
+previous_total = previous["total_online"]
+
+if previous_total is None:
+    total_change = "➖ первый запуск"
+else:
+    diff = data["total_online"] - previous_total
+
+    if diff > 0:
+        total_change = f"🟢 +{format_number(diff)}"
+    elif diff < 0:
+        total_change = f"🔴 {format_number(diff)}"
+    else:
+        total_change = "⚪ 0"
     # ======================================
     # EMBED №1 — СТАТИСТИКА
     # ======================================
 
     description = (
-        f"👥 **Онлайн сейчас:** "
-        f"`{format_number(data['total_online'])}`\n\n"
+f"👥 **Онлайн сейчас:** `{format_number(data['total_online'])}`\n"
+f"📊 **За 5 минут:** `{total_change}`\n\n"
 
         f"🖥️ **Серверов:** "
         f"`{data['servers_count']}`\n\n"
@@ -343,10 +378,23 @@ def build_embeds(data):
             else:
                 status = "🔴"
 
-            lines.append(
-                f"{status} **{name}** — "
-                f"`{format_number(online)}` игроков"
-            )
+           previous_online = previous["servers"].get(name)
+
+if previous_online is None:
+    delta = "новый"
+else:
+    diff = online - previous_online
+
+    if diff > 0:
+        delta = f"+{format_number(diff)}"
+    elif diff < 0:
+        delta = format_number(diff)
+    else:
+        delta = "0"
+
+lines.append(
+    f"{status} **{name}** — `{format_number(online)}` игроков ({delta})"
+)
 
         embeds.append({
             "title": (
@@ -440,18 +488,21 @@ def main():
             print("Создаю сообщение Discord...")
             message_id = create_message(embeds)
             save_message_id(message_id)
+            save_previous_stats(data)      # ← ВСТАВИТЬ СЮДА
             print("✓ Сообщение создано")
         else:
             print()
             print("Обновляю сообщение Discord...")
             try:
-                update_message(message_id, embeds)
-                print("✓ Сообщение обновлено")
+              update_message(message_id, embeds)
+              save_previous_stats(data)      # ← ВСТАВИТЬ СЮДА
+              print("✓ Сообщение обновлено")
             except requests.HTTPError as error:
                 if error.response is not None and error.response.status_code == 404:
                     print("Сообщение удалено. Создаю новое...")
                     message_id = create_message(embeds)
                     save_message_id(message_id)
+                    save_previous_stats(data)      # ← ВСТАВИТЬ СЮДА
                 else:
                     raise
 
