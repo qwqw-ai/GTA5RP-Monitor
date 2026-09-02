@@ -411,7 +411,7 @@ f"📊 **За 5 минут:** `{total_change}`\n\n"
             }
         })
 
-    return embeds
+        return embeds
 
 
 # ==========================================
