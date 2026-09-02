@@ -306,7 +306,7 @@ def build_embeds(data):
         "color": 0x5865F2,
         "url": SITE_URL,
         "footer": {
-            "text": "GTA5MasterList • обновление каждые 60 секунд"
+            "text": "GTA5MasterList • обновление каждые 5 минут"
         }
     })
 
