@@ -14,9 +14,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
+       
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -29,21 +27,13 @@ jobs:
         env:
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Save message_id
-  run: |
-    if [ -f message_id.txt ]; then
-      git config user.name "github-actions[bot]"
-      git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+  - name: Save message_id
+        run: |
+          if [ -f message_id.txt ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add message_id.txt previous_stats.json
+            git diff --cached --quiet || git commit -m "Update message_id"
+            git pull --rebase origin main
+          fi
 
-      # Сначала забираем последние изменения
-      git pull --rebase origin main
-
-      # Затем сохраняем оба файла
-      git add message_id.txt previous_stats.json
-
-      # Коммитим только если есть изменения
-      git diff --cached --quiet || git commit -m "Update monitor state"
-
-      # И только потом отправляем
-      git push origin main
-    fi
