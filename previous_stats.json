@@ -1,23 +1,18 @@
 {
-  "total_online": 3643,
+  "total_online": 11171,
   "servers": {
-    "Chiliad": 917,
-    "Eclipse": 512,
-    "Murrieta": 917,
-    "Redwood": 338,
-    "Downtown": 299,
-    "Rockford": 198,
-    "Richman": 178,
-    "Strawberry": 157,
-    "Insquad": 140,
-    "Sunrise": 138,
-    "Blackberry": 133,
-    "La Puerta": 114,
-    "Grapeseed": 12,
-    "Milton": 6,
-    "Alta": 5,
-    "La Mesa": 4,
-    "Burton": 4,
-    "Vinewood": 2
+    "Chiliad": 2874,
+    "Murrieta": 1556,
+    "Eclipse": 2874,
+    "Redwood": 1072,
+    "Downtown": 742,
+    "Rockford": 620,
+    "Sunrise": 549,
+    "Richman": 515,
+    "Blackberry": 443,
+    "Strawberry": 435,
+    "Insquad": 432,
+    "La Puerta": 424,
+    "Mirror": 4
   }
 }
